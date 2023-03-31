@@ -5,7 +5,7 @@
 
 Name:           rust-%{crate}
 Version:        2.3.4
-Release:        1
+Release:        2
 Summary:        Safe interface to memchr
 
 # Upstream license specification: Unlicense/MIT
