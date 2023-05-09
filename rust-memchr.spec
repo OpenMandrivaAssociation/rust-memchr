@@ -4,15 +4,16 @@
 %global crate memchr
 
 Name:           rust-%{crate}
-Version:        2.3.4
-Release:        2
+Version:        2.5.0
+Release:        1
 Summary:        Safe interface to memchr
 
 # Upstream license specification: Unlicense/MIT
 License:        Unlicense or MIT
 URL:            https://crates.io/crates/memchr
 Source:         %{crates_source}
-Patch0:		memchr-2.3.4-fix-circular-deps.patch
+Patch0:		memchr-2.5.0-filelist.patch
+#Patch0:		memchr-2.3.4-fix-circular-deps.patch
 
 ExclusiveArch:  %{rust_arches}
 %if %{__cargo_skip_build}
@@ -20,6 +21,7 @@ BuildArch:      noarch
 %endif
 
 BuildRequires:  rust-packaging
+BuildRequires:	(crate(quickcheck) >= 1.0.3 with crate(quickcheck) < 2.0.0)
 
 %global _description %{expand:
 Safe interface to memchr.}
