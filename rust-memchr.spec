@@ -3,25 +3,22 @@
 
 %global crate memchr
 
-Name:           rust-%{crate}
+Name:           rust-memchr
 Version:        2.5.0
 Release:        1
 Summary:        Safe interface to memchr
 
 # Upstream license specification: Unlicense/MIT
-License:        Unlicense or MIT
+License:        Unlicense OR MIT
 URL:            https://crates.io/crates/memchr
 Source:         %{crates_source}
-Patch0:		memchr-2.5.0-filelist.patch
-#Patch0:		memchr-2.3.4-fix-circular-deps.patch
 
 ExclusiveArch:  %{rust_arches}
-%if %{__cargo_skip_build}
-BuildArch:      noarch
-%endif
 
-BuildRequires:  rust-packaging
-BuildRequires:	(crate(quickcheck) >= 1.0.3 with crate(quickcheck) < 2.0.0)
+BuildRequires:  rust-packaging >= 21
+%if %{with check}
+BuildRequires:  (crate(quickcheck) >= 1.0.3 with crate(quickcheck) < 2.0.0~)
+%endif
 
 %global _description %{expand:
 Safe interface to memchr.}
@@ -31,71 +28,132 @@ Safe interface to memchr.}
 %package        devel
 Summary:        %{summary}
 BuildArch:      noarch
+Provides:       crate(memchr) = 2.5.0
+Requires:       cargo
 
 %description    devel %{_description}
 
-This package contains library source intended for building other packages
-which use "%{crate}" crate.
+This package contains library source intended for building other packages which
+use the "%{crate}" crate.
 
 %files          devel
-%license UNLICENSE LICENSE-MIT COPYING
-%doc README.md
-%{cargo_registry}/%{crate}-%{version_no_tilde}/
+%{crate_instdir}/
 
 %package     -n %{name}+default-devel
 Summary:        %{summary}
 BuildArch:      noarch
+Provides:       crate(memchr/default) = 2.5.0
+Requires:       cargo
+Requires:       crate(memchr) = 2.5.0
+Requires:       crate(memchr/std) = 2.5.0
 
 %description -n %{name}+default-devel %{_description}
 
-This package contains library source intended for building other packages
-which use "default" feature of "%{crate}" crate.
+This package contains library source intended for building other packages which
+use the "default" feature of the "%{crate}" crate.
 
 %files       -n %{name}+default-devel
-%ghost %{cargo_registry}/%{crate}-%{version_no_tilde}/Cargo.toml
+%ghost %{crate_instdir}/Cargo.toml
+
+%package     -n %{name}+compiler_builtins-devel
+Summary:        %{summary}
+BuildArch:      noarch
+Provides:       crate(memchr/compiler_builtins) = 2.5.0
+Requires:       (crate(compiler_builtins/default) >= 0.1.2 with crate(compiler_builtins/default) < 0.2.0~)
+Requires:       cargo
+Requires:       crate(memchr) = 2.5.0
+
+%description -n %{name}+compiler_builtins-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "compiler_builtins" feature of the "%{crate}" crate.
+
+%files       -n %{name}+compiler_builtins-devel
+%ghost %{crate_instdir}/Cargo.toml
+
+%package     -n %{name}+core-devel
+Summary:        %{summary}
+BuildArch:      noarch
+Provides:       crate(memchr/core) = 2.5.0
+Requires:       (crate(rustc-std-workspace-core/default) >= 1.0.0 with crate(rustc-std-workspace-core/default) < 2.0.0~)
+Requires:       cargo
+Requires:       crate(memchr) = 2.5.0
+
+%description -n %{name}+core-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "core" feature of the "%{crate}" crate.
+
+%files       -n %{name}+core-devel
+%ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+libc-devel
 Summary:        %{summary}
 BuildArch:      noarch
+Provides:       crate(memchr/libc) = 2.5.0
+Requires:       (crate(libc) >= 0.2.18 with crate(libc) < 0.3.0~)
+Requires:       cargo
+Requires:       crate(memchr) = 2.5.0
 
 %description -n %{name}+libc-devel %{_description}
 
-This package contains library source intended for building other packages
-which use "libc" feature of "%{crate}" crate.
+This package contains library source intended for building other packages which
+use the "libc" feature of the "%{crate}" crate.
 
 %files       -n %{name}+libc-devel
-%ghost %{cargo_registry}/%{crate}-%{version_no_tilde}/Cargo.toml
+%ghost %{crate_instdir}/Cargo.toml
+
+%package     -n %{name}+rustc-dep-of-std-devel
+Summary:        %{summary}
+BuildArch:      noarch
+Provides:       crate(memchr/rustc-dep-of-std) = 2.5.0
+Requires:       cargo
+Requires:       crate(memchr) = 2.5.0
+Requires:       crate(memchr/compiler_builtins) = 2.5.0
+Requires:       crate(memchr/core) = 2.5.0
+
+%description -n %{name}+rustc-dep-of-std-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "rustc-dep-of-std" feature of the "%{crate}" crate.
+
+%files       -n %{name}+rustc-dep-of-std-devel
+%ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+std-devel
 Summary:        %{summary}
 BuildArch:      noarch
+Provides:       crate(memchr/std) = 2.5.0
+Requires:       cargo
+Requires:       crate(memchr) = 2.5.0
 
 %description -n %{name}+std-devel %{_description}
 
-This package contains library source intended for building other packages
-which use "std" feature of "%{crate}" crate.
+This package contains library source intended for building other packages which
+use the "std" feature of the "%{crate}" crate.
 
 %files       -n %{name}+std-devel
-%ghost %{cargo_registry}/%{crate}-%{version_no_tilde}/Cargo.toml
+%ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+use_std-devel
 Summary:        %{summary}
 BuildArch:      noarch
+Provides:       crate(memchr/use_std) = 2.5.0
+Requires:       cargo
+Requires:       crate(memchr) = 2.5.0
+Requires:       crate(memchr/std) = 2.5.0
 
 %description -n %{name}+use_std-devel %{_description}
 
-This package contains library source intended for building other packages
-which use "use_std" feature of "%{crate}" crate.
+This package contains library source intended for building other packages which
+use the "use_std" feature of the "%{crate}" crate.
 
 %files       -n %{name}+use_std-devel
-%ghost %{cargo_registry}/%{crate}-%{version_no_tilde}/Cargo.toml
+%ghost %{crate_instdir}/Cargo.toml
 
 %prep
 %autosetup -n %{crate}-%{version_no_tilde} -p1
 %cargo_prep
-
-%generate_buildrequires
-%cargo_generate_buildrequires
 
 %build
 %cargo_build
