@@ -4,7 +4,7 @@
 %global crate memchr
 
 Name:           rust-memchr
-Version:        2.5.0
+Version:        2.8.3
 Release:        1
 Summary:        Safe interface to memchr
 
